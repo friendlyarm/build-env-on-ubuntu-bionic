@@ -54,3 +54,6 @@ sudo apt-get -y install repo time gettext java-propose-classpath
 
 # simg2img
 sudo apt-get -y install android-tools-fsutils
+
+# libreELEC
+sudo apt-get -y install bc lzop xfonts-utils xfonts-utils xfonts-utils xsltproc libjson-perl
