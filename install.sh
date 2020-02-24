@@ -9,6 +9,7 @@ sudo apt-get -y install device-tree-compiler
 
 # kernel release-4.4
 sudo apt-get -y install liblz4-tool
+sudo apt-get -y install bison
 
 # android 5
 sudo apt-get -y install zlib1g:i386
