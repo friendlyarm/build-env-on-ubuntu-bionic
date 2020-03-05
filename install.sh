@@ -58,3 +58,6 @@ sudo apt-get -y install android-tools-fsutils
 
 # libreELEC
 sudo apt-get -y install bc lzop xfonts-utils xfonts-utils xfonts-utils xsltproc libjson-perl
+
+# for openwrt armhf
+sudo apt-get -y linux-libc-dev:i386
