@@ -62,4 +62,7 @@ sudo apt-get -y install bc lzop xfonts-utils xfonts-utils xfonts-utils xsltproc 
 # for openwrt armhf
 sudo apt-get -y install linux-libc-dev:i386
 
+# for wireguard
+sudo apt-get -y install libmnl-dev
+
 exit 0
