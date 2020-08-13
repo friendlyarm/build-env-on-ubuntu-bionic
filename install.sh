@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get -y install bison g++-multilib git gperf libxml2-utils make python-networkx zip
+sudo apt-get -y install bison g++-multilib git gperf libxml2-utils make python-networkx zip patchelf
 sudo apt-get -y install flex curl libncurses5-dev libssl-dev zlib1g-dev gawk minicom
 sudo apt-get -y install openjdk-8-jdk
 
