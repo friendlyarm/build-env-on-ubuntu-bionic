@@ -51,7 +51,7 @@ sudo apt-get -y install u-boot-tools swig python-dev python3-dev
 sudo apt -y install ack-grep
 
 # openwrt
-sudo apt-get -y install repo time gettext java-propose-classpath
+sudo apt-get -y install repo time gettext java-propose-classpath apt zstd
 
 # simg2img
 sudo apt-get -y install android-tools-fsutils
