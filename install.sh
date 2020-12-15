@@ -1,6 +1,8 @@
 #!/bin/bash
+[ -f /etc/os-release ] && . /etc/os-release
 
-sudo apt-get -y install bison g++-multilib git gperf libxml2-utils make python-networkx zip patchelf
+sudo apt-get -y install bison g++-multilib git gperf libxml2-utils make zip patchelf
+[ ${UBUNTU_CODENAME} = "bionic" ] && sudo apt-get -y install python-networkx
 sudo apt-get -y install flex curl libncurses5-dev libssl-dev zlib1g-dev gawk minicom
 sudo apt-get -y install openjdk-8-jdk
 
@@ -10,9 +12,6 @@ sudo apt-get -y install device-tree-compiler
 # kernel release-4.4
 sudo apt-get -y install liblz4-tool
 sudo apt-get -y install bison
-
-# android 5
-sudo apt-get -y install zlib1g:i386
 
 # recommended
 sudo apt-get -y install openssh-server vim
@@ -51,16 +50,17 @@ sudo apt-get -y install u-boot-tools swig python-dev python3-dev
 sudo apt -y install ack-grep
 
 # openwrt
-sudo apt-get -y install repo time gettext java-propose-classpath apt zstd
+sudo apt-get -y install time gettext java-propose-classpath apt zstd
 
 # simg2img
-sudo apt-get -y install android-tools-fsutils
+[ ${UBUNTU_CODENAME} = "bionic" ] && sudo apt-get -y install android-tools-fsutils
+[ ${UBUNTU_CODENAME} = "focal" ] && sudo apt-get -y install android-sdk-libsparse-utils
 
 # libreELEC
 sudo apt-get -y install bc lzop xfonts-utils xfonts-utils xfonts-utils xsltproc libjson-perl
 
 # for openwrt armhf
-sudo apt-get -y install linux-libc-dev:i386
+sudo apt-get -y install libc6:i386
 
 # for wireguard
 sudo apt-get -y install libmnl-dev
