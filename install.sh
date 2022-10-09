@@ -1,68 +1,107 @@
 #!/bin/bash
-[ -f /etc/os-release ] && . /etc/os-release
+# set -eux
 
-sudo apt-get -y install bison g++-multilib git gperf libxml2-utils make zip patchelf
-[ ${UBUNTU_CODENAME} = "bionic" ] && sudo apt-get -y install python-networkx
-sudo apt-get -y install flex curl libncurses5-dev libssl-dev zlib1g-dev gawk minicom
-sudo apt-get -y install openjdk-8-jdk
+# Automatically re-run script under sudo if not root
+if [ $(id -u) -ne 0 ]; then
+    echo "Re-running script under sudo..."
+    sudo "$0" "$@"
+    exit
+fi
 
-# uboot v2016
-sudo apt-get -y install device-tree-compiler
+if [ ! -f /etc/os-release ]; then
+    echo "WARNING: This script only works on Ubuntu"
+fi
+source /etc/os-release
+case ${UBUNTU_CODENAME} in
+bionic | focal | jammy)
+    ;;
+*)
+    echo "WARNING: This script only works on Ubuntu bionic/focal/jammy"
+    exit 1
+esac
 
-# kernel release-4.4
-sudo apt-get -y install liblz4-tool
-sudo apt-get -y install bison
+apt-get -y update
+echo 'tzdata tzdata/Areas select Asia' | debconf-set-selections
+echo 'tzdata tzdata/Zones/Asia select Chongqing' | debconf-set-selections
+DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
-# recommended
-sudo apt-get -y install openssh-server vim
-sudo apt-get -y install qemu-user-static
-sudo apt-get -y install exfat-fuse exfat-utils p7zip-full tree
+apt-get -y install bash git cvs gzip bzip2 unzip tar perl sudo file time aria2 wget make minicom \
+    lsb-release openssh-client vim tree u-boot-tools texinfo mediainfo \
+    pkg-config libncurses* zlib1g-dev gcc g++ gawk patch libgstreamer1.0-dev \
+    libgstreamer-plugins-base1.0-dev libxcb-xinerama0 libxcb-xinerama0-dev \
+    libopenal-dev libuv1-dev bridge-utils ifplugd
+apt-get install -f
 
-# build git-2.18+
-sudo apt-get -y install autoconf
-sudo apt-get -y install libcurl4-openssl-dev libssh-dev
+apt-get -y install libjpeg8 libjpeg8-dev libjpeg-turbo8 libjpeg-turbo8-dev libvpx-dev \
+    libgtk2.0-dev libgconf-2-4 gconf2 gconf2-common libx11-dev libxext-dev libxtst-dev \
+    libxrender-dev libxmu-dev libxmuu-dev libxfixes-dev libxfixes3 libpangocairo-1.0-0 \
+    libpangoft2-1.0-0 libdbus-1-dev libdbus-1-3 libusb-0.1-4 libusb-1.0-0-dev libusb-dev \
+    libcurl4-openssl-dev libssh-dev libxml2-utils
+apt-get -y install bison build-essential gperf flex ruby libasound2-dev \
+    libbz2-dev libcap-dev libcups2-dev libdrm-dev
+apt-get -y install libegl1-mesa-dev libnss3-dev libpci-dev libpulse-dev libudev-dev
+apt-get -y install gyp ninja-build libssl-dev libxcursor-dev libxcomposite-dev \
+    libxdamage-dev libxrandr-dev
+apt-get -y install libfontconfig1-dev libxss-dev libwebp-dev libjsoncpp-dev libopus-dev \
+    libminizip-dev libavutil-dev libavformat-dev libavcodec-dev libevent-dev
+apt-get -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-arm-linux-gnueabihf \
+    g++-arm-linux-gnueabihf qemu-user-static debootstrap whiptail bc device-tree-compiler \
+    swig liblz4-tool mercurial subversion w3m graphviz genext2fs lib32stdc++6
 
-# build x86-x64 kernel
-sudo apt-get -y install pkg-config
-sudo apt-get -y install libelf-dev
+if [ ${UBUNTU_CODENAME} = "jammy" ]; then
+    apt-get -y install python2-dev python2 python-dev-is-python3
+else
+    apt-get -y install python python-dev python3-dev
+fi
+# libc6-dev-i386
+# packages for rk linux-sdk
+apt-get -y install expect expect-dev mtools \
+    autoconf autotools-dev libsigsegv2 m4 intltool curl sed binutils libglib2.0-dev \
+    libglade2-dev
+if [ ${UBUNTU_CODENAME} = "bionic" ]; then
+    apt-get -y install libqt4-dev python-linaro-image-tools linaro-image-tools
+fi
 
-# build mtd-utils v2.0.2+
-sudo apt-get -y install libtool
 
-# virtualbox
-sudo apt-get -y install libqt5core5a libqt5gui5 libqt5opengl5 \
-	libqt5printsupport5 libqt5widgets5 libqt5x11extras5 libsdl1.2debian
-
-# buildroot (rockchip)
-sudo apt-get -y install texinfo
-sudo apt-get -y install genext2fs
+apt-get -y install kmod cpio rsync zip patchelf live-build gettext zstd
 
 # crosstool-ng
-sudo apt-get -y install lzip help2man libtool libtool-bin
+apt-get -y install lzip help2man libtool libtool-bin
 
-# qemu
-sudo apt-get -y install debootstrap
+# musl-dev
+apt-get -y install musl-dev
+[ -e /lib/libc.musl-x86_64.so.1 ] || ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
 
-# for allwinner
-sudo apt-get -y install u-boot-tools swig python-dev python3-dev
+# misc tools
+apt-get -y install net-tools silversearcher-ag strace
+apt-get -y install pigz p7zip-full
 
-# act-greq
-sudo apt -y install ack-grep
-
-# openwrt
-sudo apt-get -y install time gettext java-propose-classpath apt zstd
-
-# simg2img
-[ ${UBUNTU_CODENAME} = "bionic" ] && sudo apt-get -y install android-tools-fsutils
-[ ${UBUNTU_CODENAME} = "focal" ] && sudo apt-get -y install android-sdk-libsparse-utils
-
-# libreELEC
-sudo apt-get -y install bc lzop xfonts-utils xfonts-utils xfonts-utils xsltproc libjson-perl
-
-# for openwrt armhf
-sudo apt-get -y install libc6:i386
+# for sd_fuse
+apt-get -y install parted udev
+if [ ${UBUNTU_CODENAME} = "bionic" ]; then
+    apt-get -y install android-tools-fsutils
+elif [ ${UBUNTU_CODENAME} = "focal" -o ${UBUNTU_CODENAME} = "jammy" ]; then
+    apt-get -y install android-sdk-libsparse-utils
+fi
+git clone https://github.com/exfatprogs/exfatprogs --depth 1 -b master
+(cd exfatprogs && {
+    ./autogen.sh
+    ./configure
+    make
+    make install
+})
+rm -rf exfatprogs
 
 # for wireguard
-sudo apt-get -y install libmnl-dev
+apt-get -y install libmnl-dev
 
-exit 0
+# for android
+apt-get -y install openjdk-8-jdk
+
+# install friendlyelec-toolchain
+[ -d fa-toolchain ] || git clone https://github.com/friendlyarm/prebuilts.git -b master --depth 1 fa-toolchain
+cat fa-toolchain/gcc-x64/toolchain-4.9.3-armhf.tar.gz* | tar xz -C /
+cat fa-toolchain/gcc-x64/toolchain-6.4-aarch64.tar.gz* | tar xz -C /
+rm -rf fa-toolchain
+
+echo "all done."
