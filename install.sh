@@ -102,6 +102,8 @@ apt-get -y install openjdk-8-jdk
 [ -d fa-toolchain ] || git clone https://github.com/friendlyarm/prebuilts.git -b master --depth 1 fa-toolchain
 cat fa-toolchain/gcc-x64/toolchain-4.9.3-armhf.tar.gz* | tar xz -C /
 cat fa-toolchain/gcc-x64/toolchain-6.4-aarch64.tar.gz* | tar xz -C /
+tar xf fa-toolchain/gcc-x64/toolchain-11.3-aarch64.tar.xz -C /
+
 rm -rf fa-toolchain
 
 echo "all done."
