@@ -8,6 +8,7 @@ chmod 755 install.sh
 sudo ./install.sh
 ```
 ### Supported Distributions
-- Ubuntu bionic (Recommended)
-- Ubuntu focal
+- Ubuntu bionic
+- Ubuntu focal (Recommended)
 - Ubuntu jammy
+- Ubuntu noble

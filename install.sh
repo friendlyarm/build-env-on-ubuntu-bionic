@@ -13,10 +13,10 @@ if [ ! -f /etc/os-release ]; then
 fi
 source /etc/os-release
 case ${UBUNTU_CODENAME} in
-bionic | focal | jammy)
+bionic | focal | jammy | noble)
     ;;
 *)
-    echo "WARNING: This script only works on Ubuntu bionic/focal/jammy"
+    echo "WARNING: This script only works on Ubuntu bionic/focal/jammy/noble"
     exit 1
 esac
 
@@ -40,7 +40,7 @@ apt-get -y install libjpeg8 libjpeg8-dev libjpeg-turbo8 libjpeg-turbo8-dev libvp
 apt-get -y install bison build-essential gperf flex ruby libasound2-dev \
     libbz2-dev libcap-dev libcups2-dev libdrm-dev
 apt-get -y install libegl1-mesa-dev libnss3-dev libpci-dev libpulse-dev libudev-dev
-apt-get -y install gyp ninja-build libssl-dev libxcursor-dev libxcomposite-dev \
+apt-get -y install gyp ninja-build libssl-dev libelf-dev libxcursor-dev libxcomposite-dev \
     libxdamage-dev libxrandr-dev
 apt-get -y install libfontconfig1-dev libxss-dev libwebp-dev libjsoncpp-dev libopus-dev \
     libminizip-dev libavutil-dev libavformat-dev libavcodec-dev libevent-dev
@@ -48,11 +48,16 @@ apt-get -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-arm-linux-gnu
     g++-arm-linux-gnueabihf qemu-user-static debootstrap whiptail bc device-tree-compiler \
     swig liblz4-tool mercurial subversion w3m graphviz genext2fs lib32stdc++6
 
-if [ ${UBUNTU_CODENAME} = "jammy" ]; then
-    apt-get -y install python2-dev python2 python-dev-is-python3
-else
-    apt-get -y install python python-dev python3-dev
-fi
+# python
+case "${UBUNTU_CODENAME}" in
+jammy|noble)
+	apt-get -y install python2-dev python2 python-dev-is-python3
+        ;;
+*)
+        apt-get -y install python python-dev python3-dev
+        ;;
+esac
+
 # libc6-dev-i386
 # packages for rk linux-sdk
 apt-get -y install expect expect-dev mtools \
@@ -61,8 +66,6 @@ apt-get -y install expect expect-dev mtools \
 if [ ${UBUNTU_CODENAME} = "bionic" ]; then
     apt-get -y install libqt4-dev python-linaro-image-tools linaro-image-tools
 fi
-
-
 apt-get -y install kmod cpio rsync zip patchelf live-build gettext zstd
 
 # crosstool-ng
@@ -77,20 +80,25 @@ apt-get -y install net-tools silversearcher-ag strace
 apt-get -y install pigz p7zip-full
 
 # for sd_fuse
-apt-get -y install parted udev
-if [ ${UBUNTU_CODENAME} = "bionic" ]; then
-    apt-get -y install android-tools-fsutils
-elif [ ${UBUNTU_CODENAME} = "focal" -o ${UBUNTU_CODENAME} = "jammy" ]; then
-    apt-get -y install android-sdk-libsparse-utils
-fi
-git clone https://github.com/exfatprogs/exfatprogs --depth 1 -b master
-(cd exfatprogs && {
-    ./autogen.sh
-    ./configure
-    make
-    make install
-})
-rm -rf exfatprogs
+apt-get -y install parted udev fdisk e2fsprogs
+
+# simg2img
+case "${UBUNTU_CODENAME}" in
+focal|jammy|noble)
+        apt-get -y install android-sdk-libsparse-utils
+        ;;
+*)
+        apt-get -y install android-tools-fsutils
+        ;;
+esac
+case "${UBUNTU_CODENAME}" in
+jammy|noble)
+	apt-get -y install exfatprogs
+	;;
+*)
+	apt-get -y install exfat-fuse exfat-utils
+	;;
+esac
 
 # for wireguard
 apt-get -y install libmnl-dev
