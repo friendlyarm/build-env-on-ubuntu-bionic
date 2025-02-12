@@ -109,6 +109,9 @@ apt-get -y install openjdk-8-jdk
 # for openwrt23
 apt-get -y install gcc-multilib
 
+# for openwrt24
+apt-get -y install python3-pyelftools
+
 # install friendlyelec-toolchain
 [ -d fa-toolchain ] || git clone https://github.com/friendlyarm/prebuilts.git -b master --depth 1 fa-toolchain
 (cat fa-toolchain/gcc-x64/toolchain-4.9.3-armhf.tar.gz* | tar xz -C /)
