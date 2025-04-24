@@ -23,7 +23,7 @@ esac
 apt-get -y update
 echo 'tzdata tzdata/Areas select Asia' | debconf-set-selections
 echo 'tzdata tzdata/Zones/Asia select Chongqing' | debconf-set-selections
-DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
+DEBIAN_FRONTEND="noninteractive" apt-get install -y tzdata
 
 apt-get -y install bash git cvs gzip bzip2 unzip tar perl sudo file time aria2 wget make minicom \
     lsb-release openssh-client vim tree u-boot-tools texinfo mediainfo \
@@ -33,7 +33,7 @@ apt-get -y install bash git cvs gzip bzip2 unzip tar perl sudo file time aria2 w
 apt-get install -f
 
 apt-get -y install libjpeg8 libjpeg8-dev libjpeg-turbo8 libjpeg-turbo8-dev libvpx-dev \
-    libgtk2.0-dev libgconf-2-4 gconf2 gconf2-common libx11-dev libxext-dev libxtst-dev \
+    libgtk2.0-dev libx11-dev libxext-dev libxtst-dev \
     libxrender-dev libxmu-dev libxmuu-dev libxfixes-dev libxfixes3 libpangocairo-1.0-0 \
     libpangoft2-1.0-0 libdbus-1-dev libdbus-1-3 libusb-0.1-4 libusb-1.0-0-dev libusb-dev \
     libcurl4-openssl-dev libssh-dev libxml2-utils
@@ -51,11 +51,11 @@ apt-get -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-arm-linux-gnu
 # python
 case "${UBUNTU_CODENAME}" in
 jammy|noble)
-	apt-get -y install python2-dev python2 python-dev-is-python3
-        ;;
+    apt-get -y install python3 python-is-python3 python3-pyelftools
+	;;
 *)
-        apt-get -y install python python-dev python3-dev
-        ;;
+    apt-get -y install gconf2 gconf2-common libgconf-2-4 python python-dev
+    ;;
 esac
 
 # libc6-dev-i386
@@ -85,7 +85,7 @@ apt-get -y install parted udev fdisk e2fsprogs
 # simg2img
 case "${UBUNTU_CODENAME}" in
 focal|jammy|noble)
-        apt-get -y install android-sdk-libsparse-utils
+        apt-get -y install android-sdk-libsparse-utils btrfs-progs libreiserfscore0t64
         ;;
 *)
         apt-get -y install android-tools-fsutils
@@ -109,8 +109,8 @@ apt-get -y install openjdk-8-jdk
 # for openwrt23
 apt-get -y install gcc-multilib
 
-# for openwrt24
-apt-get -y install python3-pyelftools
+# for openwrt24 (uboot)
+apt-get -y install python3-dev python3-setuptools
 
 # install friendlyelec-toolchain
 [ -d fa-toolchain ] || git clone https://github.com/friendlyarm/prebuilts.git -b master --depth 1 fa-toolchain
