@@ -85,12 +85,13 @@ apt-get -y install parted udev fdisk e2fsprogs
 # simg2img
 case "${UBUNTU_CODENAME}" in
 focal|jammy|noble)
-        apt-get -y install android-sdk-libsparse-utils btrfs-progs libreiserfscore0t64
+        apt-get -y install android-libbase android-liblog android-libsparse android-sdk-libsparse-utils btrfs-progs
         ;;
 *)
         apt-get -y install android-tools-fsutils
         ;;
 esac
+
 case "${UBUNTU_CODENAME}" in
 jammy|noble)
 	apt-get -y install exfatprogs
