@@ -113,6 +113,9 @@ apt-get -y install gcc-multilib
 # for openwrt24 (uboot)
 apt-get -y install python3-dev python3-setuptools
 
+# for android 14+ (kernel-6.1)
+apt install dwarves lz4
+
 # install friendlyelec-toolchain
 [ -d fa-toolchain ] || git clone https://github.com/friendlyarm/prebuilts.git -b master --depth 1 fa-toolchain
 (cat fa-toolchain/gcc-x64/toolchain-4.9.3-armhf.tar.gz* | tar xz -C /)
