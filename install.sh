@@ -94,7 +94,7 @@ esac
 
 case "${UBUNTU_CODENAME}" in
 jammy|noble)
-	apt-get -y install exfatprogs
+	apt-get -y install exfatprogs exfat-fuse
 	;;
 *)
 	apt-get -y install exfat-fuse exfat-utils
