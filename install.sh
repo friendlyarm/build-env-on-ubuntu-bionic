@@ -50,7 +50,7 @@ apt-get -y install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-arm-linux-gnu
 
 # python
 case "${UBUNTU_CODENAME}" in
-jammy|noble)
+focal|jammy|noble)
     apt-get -y install python3 python-is-python3 python3-pyelftools
 	;;
 *)
